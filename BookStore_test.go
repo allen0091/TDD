@@ -1,26 +1,8 @@
 package bookstroe
 
-import "testing"
-
-func TestBuyOneBook(t *testing.T) {
-
-	price := calculatePrice([]int{1})
-
-	if price != 8 {
-		t.Fatal("Price should be 8, but got ", price)
-	}
-
-}
-
-func TestBuyTwoDifferentBook(t *testing.T) {
-
-	price := calculatePrice([]int{1, 1}) //第一集買一本 第二集買1本
-
-	if price != 15.2 {
-		t.Fatal("price should be 15.2, but got", price)
-	}
-
-}
+import (
+	"testing"
+)
 
 func Test_calculatePrice(t *testing.T) {
 	type args struct {
@@ -29,7 +11,7 @@ func Test_calculatePrice(t *testing.T) {
 	tests := []struct {
 		name string // test name
 		args args
-		want float32 // expected value
+		want float64 // expected value
 	}{
 		{
 			name: "Basic : zero book",
@@ -49,12 +31,12 @@ func Test_calculatePrice(t *testing.T) {
 		{
 			name: "SimpleDiscounts : three different book",
 			args: args{books: []int{1, 2, 4}},
-			want: 3 * 8 * 0.95,
+			want: 3 * 8 * 0.9,
 		},
 		{
 			name: "SimpleDiscounts : five different book",
 			args: args{books: []int{1, 2, 3, 4, 5}},
-			want: 5 * 8 * 0.95,
+			want: 5 * 8 * 0.75,
 		},
 		{
 			name: "SeveralDiscounts : 2_EP1&1_EP2",
@@ -76,10 +58,44 @@ func Test_calculatePrice(t *testing.T) {
 	}
 }
 
-func calculatePrice(books []int) float32 {
-	count := len(books)
-	if count > 1 {
-		return float32(count) * 8 * 0.95
+func calculatePrice(books []int) float64 {
+	epMap := make(map[int]int)
+	for i := 0; i < len(books); i++ {
+		epMap[books[i]]++
 	}
-	return 8
+
+	total := float64(0)
+	mapLen := len(epMap)
+	for mapLen > 0 {
+		temp := 0
+		for key, element := range epMap {
+			if element > 0 {
+				temp += 1
+				temp_element := element - 1
+				epMap[key] = temp_element
+				if temp_element == 0 {
+					mapLen--
+				}
+			}
+		}
+		total += calculateDiscount(temp)
+	}
+	return total
+}
+
+func calculateDiscount(len int) float64 {
+	switch len {
+	case 1:
+		return 8
+	case 2:
+		return float64(len) * 8 * 0.95
+	case 3:
+		return float64(len) * 8 * 0.9
+	case 4:
+		return float64(len) * 8 * 0.8
+	case 5:
+		return float64(len) * 8 * 0.75
+	default:
+		return 0
+	}
 }
