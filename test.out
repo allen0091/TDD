@@ -1,0 +1,8 @@
+=== RUN   TestBuyOneBook
+--- PASS: TestBuyOneBook (0.00s)
+=== RUN   TestBuyTwoDifferentBook
+    BookStore_test.go:20: price should be 15.2, but got 8
+--- FAIL: TestBuyTwoDifferentBook (0.00s)
+FAIL
+exit status 1
+FAIL	_/home/allenchen/TDD	0.002s
