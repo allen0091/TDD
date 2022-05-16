@@ -23,5 +23,9 @@ func TestBuyTwoDifferentBook(t *testing.T) {
 }
 
 func calculatePrice(books []int) float32 {
+	count := len(books)
+	if count == 2 {
+		return float32(count) * 8 * 0.95
+	}
 	return 8
 }
