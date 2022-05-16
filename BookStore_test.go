@@ -56,6 +56,16 @@ func Test_calculatePrice(t *testing.T) {
 			args: args{books: []int{1, 2, 3, 4, 5}},
 			want: 5 * 8 * 0.95,
 		},
+		{
+			name: "SeveralDiscounts : 2_EP1&1_EP2",
+			args: args{books: []int{1, 1, 2}},
+			want: 8 + (8 * 2 * 0.95),
+		},
+		{
+			name: "SeveralDiscounts : 2_EP1&1_EP2&2_EP3&1_EP4",
+			args: args{books: []int{1, 1, 2, 3, 3, 4}},
+			want: (8 * 4 * 0.8) + (8 * 2 * 0.95),
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
